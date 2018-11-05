@@ -10,7 +10,7 @@
 
 #define TFT_DC    8
 #define TFT_RST   9 
-//#define TFT_CS    10 // only for displays with CS pin
+#define TFT_CS    10 // only for displays with CS pin
 #define TFT_MOSI  11   // for hardware SPI data pin (all of available pins)
 #define TFT_SCLK  13   // for hardware SPI sclk pin (all of available pins)
 
@@ -19,8 +19,10 @@
 //Arduino_ST7789 tft = Arduino_ST7789(TFT_DC, TFT_RST); //for display without CS pin
 //Arduino_ST7789 tft = Arduino_ST7789(TFT_DC, TFT_RST, TFT_CS); //for display with CS pin
 //or you can use software SPI on all available pins (slow)
-Arduino_ST7789 tft = Arduino_ST7789(TFT_DC, TFT_RST, TFT_MOSI, TFT_SCLK); //for display without CS pin
+//Arduino_ST7789 tft = Arduino_ST7789(TFT_DC, TFT_RST, TFT_MOSI, TFT_SCLK); //for display without CS pin
 //Arduino_ST7789 tft = Arduino_ST7789(TFT_DC, TFT_RST, TFT_MOSI, TFT_SCLK, TFT_CS); //for display with CS pin
+Arduino_ST7789 tft = Arduino_ST7789(-1, TFT_RST, TFT_MOSI, TFT_SCLK, TFT_CS); //for display with CS pin and DC via 9bit SPI
+
 
 float p = 3.1415926;
 

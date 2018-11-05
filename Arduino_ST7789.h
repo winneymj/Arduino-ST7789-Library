@@ -122,6 +122,8 @@ class Arduino_ST7789 : public Adafruit_GFX {
   inline void DC_LOW(void);
 
   boolean  _hwSPI;
+  boolean  _SPI9bit;
+  boolean  _DCbit;
 
   int8_t  _cs, _dc, _rst, _sid, _sclk;
 

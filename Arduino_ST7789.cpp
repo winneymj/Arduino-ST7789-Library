@@ -67,6 +67,8 @@ Arduino_ST7789::Arduino_ST7789(int8_t dc, int8_t rst, int8_t sid, int8_t sclk, i
   _sclk = sclk;
   _rst  = rst;
   _hwSPI = false;
+  if(dc == -1) _SPI9bit = true;
+  else _SPI9bit = false;  
 }
 
 // Constructor when using hardware SPI.  Faster, but must use SPI pins
@@ -77,14 +79,17 @@ Arduino_ST7789::Arduino_ST7789(int8_t dc, int8_t rst, int8_t cs)
   _dc   = dc;
   _rst  = rst;
   _hwSPI = true;
+  _SPI9bit = false;
   _sid  = _sclk = -1;
 }
 
-inline void Arduino_ST7789::spiwrite(uint8_t c) {
+inline void Arduino_ST7789::spiwrite(uint8_t c) 
+{
 
   //Serial.println(c, HEX);
 
-  if (_hwSPI) {
+  if (_hwSPI) 
+  {
 #if defined (SPI_HAS_TRANSACTION)
       SPI.transfer(c);
 #elif defined (__AVR__) || defined(CORE_TEENSY)
@@ -97,22 +102,58 @@ inline void Arduino_ST7789::spiwrite(uint8_t c) {
       SPI.setDataMode(SPI_MODE2);
       SPI.transfer(c);
 #endif
-  } else {
-
-    // Fast SPI bitbang swiped from LPD8806 library
-    for(uint8_t bit = 0x80; bit; bit >>= 1) {
+  }
+  else 
+  {
+	  if(_SPI9bit)
+	  {
+		//9s bit send first
 #if defined(USE_FAST_IO)
-	  *clkport &= ~clkpinmask;
-      if(c & bit) *dataport |=  datapinmask;
-      else        *dataport &= ~datapinmask;
-      *clkport |=  clkpinmask;
+		*clkport &= ~clkpinmask;
+		if(_DCbit) *dataport |=  datapinmask;
+		else        *dataport &= ~datapinmask;
+		*clkport |=  clkpinmask;
 #else
-	  digitalWrite(_sclk, LOW);
-      if(c & bit) digitalWrite(_sid, HIGH);
-      else        digitalWrite(_sid, LOW);
-      digitalWrite(_sclk, HIGH);
+		digitalWrite(_sclk, LOW);
+		if(_DCbit) digitalWrite(_sid, HIGH);
+		else        digitalWrite(_sid, LOW);
+		digitalWrite(_sclk, HIGH);
 #endif
-    }
+		
+		
+		// Fast SPI bitbang swiped from LPD8806 library
+		for(uint8_t bit = 0x80; bit; bit >>= 1) {
+#if defined(USE_FAST_IO)
+		*clkport &= ~clkpinmask;
+		if(c & bit) *dataport |=  datapinmask;
+		else        *dataport &= ~datapinmask;
+		*clkport |=  clkpinmask;
+#else
+		digitalWrite(_sclk, LOW);
+		if(c & bit) digitalWrite(_sid, HIGH);
+		else        digitalWrite(_sid, LOW);
+		digitalWrite(_sclk, HIGH);
+#endif
+		  
+	  }
+	  }
+	  else
+	  {
+		  // Fast SPI bitbang swiped from LPD8806 library
+		for(uint8_t bit = 0x80; bit; bit >>= 1) {
+#if defined(USE_FAST_IO)
+		*clkport &= ~clkpinmask;
+		if(c & bit) *dataport |=  datapinmask;
+		else        *dataport &= ~datapinmask;
+		*clkport |=  clkpinmask;
+#else
+		digitalWrite(_sclk, LOW);
+		if(c & bit) digitalWrite(_sid, HIGH);
+		else        digitalWrite(_sid, LOW);
+		digitalWrite(_sclk, HIGH);
+#endif
+	  }
+	}
   }
 }
 
@@ -432,6 +473,7 @@ inline void Arduino_ST7789::CS_LOW(void) {
 }
 
 inline void Arduino_ST7789::DC_HIGH(void) {
+	_DCbit = true;
 #if defined(USE_FAST_IO)
   *dcport |= dcpinmask;
 #else
@@ -440,6 +482,7 @@ inline void Arduino_ST7789::DC_HIGH(void) {
 }
 
 inline void Arduino_ST7789::DC_LOW(void) {
+	_DCbit = false;
 #if defined(USE_FAST_IO)
   *dcport &= ~dcpinmask;
 #else
