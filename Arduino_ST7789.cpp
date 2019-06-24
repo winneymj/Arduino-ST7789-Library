@@ -1,7 +1,10 @@
 /***************************************************
   This is a library for the ST7789 IPS SPI display.
 
-  Written by Ananev Ilya.
+  Originally written by Limor Fried/Ladyada for 
+  Adafruit Industries.
+
+  Modified by Ananev Ilia
  ****************************************************/
 
 #include "Arduino_ST7789.h"
@@ -24,12 +27,12 @@ static const uint8_t PROGMEM
       0x00,                   				// Row addr/col addr, bottom to top refresh
     ST7789_CASET  , 4,  					// 5: Column addr set, 4 args, no delay:
       0x00, ST7789_240x240_XSTART,          // XSTART = 0
-	  (240+ST7789_240x240_XSTART) >> 8,
-	  (240+ST7789_240x240_XSTART) & 0xFF,   // XEND = 240
+	  (ST7789_TFTWIDTH+ST7789_240x240_XSTART) >> 8,
+	  (ST7789_TFTWIDTH+ST7789_240x240_XSTART) & 0xFF,   // XEND = 240
     ST7789_RASET  , 4,  					// 6: Row addr set, 4 args, no delay:
       0x00, ST7789_240x240_YSTART,          // YSTART = 0
-      (240+ST7789_240x240_YSTART) >> 8,
-	  (240+ST7789_240x240_YSTART) & 0xFF,	// YEND = 240
+      (ST7789_TFTHEIGHT+ST7789_240x240_YSTART) >> 8,
+	  (ST7789_TFTHEIGHT+ST7789_240x240_YSTART) & 0xFF,	// YEND = 240
     ST7789_INVON ,   ST_CMD_DELAY,  		// 7: Inversion ON
       10,
     ST7789_NORON  ,   ST_CMD_DELAY,  		// 8: Normal display on, no args, w/delay
@@ -59,7 +62,7 @@ inline uint16_t swapcolor(uint16_t x) {
 
 // Constructor when using software SPI.  All output pins are configurable.
 Arduino_ST7789::Arduino_ST7789(int8_t dc, int8_t rst, int8_t sid, int8_t sclk, int8_t cs) 
-  : Adafruit_GFX(ST7789_TFTWIDTH_240, ST7789_TFTHEIGHT_240)
+  : Adafruit_GFX(ST7789_TFTWIDTH, ST7789_TFTHEIGHT)
 {
   _cs   = cs;
   _dc   = dc;
@@ -72,7 +75,7 @@ Arduino_ST7789::Arduino_ST7789(int8_t dc, int8_t rst, int8_t sid, int8_t sclk, i
 // Constructor when using hardware SPI.  Faster, but must use SPI pins
 // specific to each board type (e.g. 11,13 for Uno, 51,52 for Mega, etc.)
 Arduino_ST7789::Arduino_ST7789(int8_t dc, int8_t rst, int8_t cs) 
-  : Adafruit_GFX(ST7789_TFTWIDTH_240, ST7789_TFTHEIGHT_240) {
+  : Adafruit_GFX(ST7789_TFTWIDTH, ST7789_TFTHEIGHT) {
   _cs   = cs;
   _dc   = dc;
   _rst  = rst;
@@ -272,8 +275,8 @@ void Arduino_ST7789::setRotation(uint8_t m) {
   }
 }
 
-void Arduino_ST7789::setAddrWindow(uint8_t x0, uint8_t y0, uint8_t x1,
- uint8_t y1) {
+void Arduino_ST7789::setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1,
+ uint16_t y1) {
 
   uint16_t x_start = x0 + _xstart, x_end = x1 + _xstart;
   uint16_t y_start = y0 + _ystart, y_end = y1 + _ystart;

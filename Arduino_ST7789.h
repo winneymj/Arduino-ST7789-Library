@@ -1,7 +1,10 @@
 /***************************************************
   This is a library for the ST7789 IPS SPI display.
 
-  Written by Ananev Ilya.
+  Originally written by Limor Fried/Ladyada for 
+  Adafruit Industries.
+
+  Modified by Ananev Ilia
  ****************************************************/
 
 #ifndef _ADAFRUIT_ST7789H_
@@ -33,8 +36,8 @@
   typedef unsigned char prog_uchar;
 #endif
 
-#define ST7789_TFTWIDTH_240 	240
-#define ST7789_TFTHEIGHT_240 	240
+#define ST7789_TFTWIDTH 	240
+#define ST7789_TFTHEIGHT 	240
 
 #define ST7789_240x240_XSTART 0
 #define ST7789_240x240_YSTART 0
@@ -92,7 +95,7 @@ class Arduino_ST7789 : public Adafruit_GFX {
   Arduino_ST7789(int8_t DC, int8_t RST, int8_t SID, int8_t SCLK, int8_t CS = -1);
   Arduino_ST7789(int8_t DC, int8_t RST, int8_t CS = -1);
 
-  void     setAddrWindow(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1),
+  void     setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1),
            pushColor(uint16_t color),
            fillScreen(uint16_t color),
            drawPixel(int16_t x, int16_t y, uint16_t color),

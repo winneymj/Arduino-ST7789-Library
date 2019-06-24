@@ -1,7 +1,10 @@
 /***************************************************
   This is a library for the ST7789 IPS SPI display.
 
-  Written by Ananev Ilya.
+  Originally written by Limor Fried/Ladyada for 
+  Adafruit Industries.
+
+  Modified by Ananev Ilia
  ****************************************************/
 
 #include <Adafruit_GFX.h>    // Core graphics library by Adafruit
