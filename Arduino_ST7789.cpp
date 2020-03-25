@@ -14,17 +14,66 @@
 #include <SPI.h>
 
 static const uint8_t PROGMEM
+//  cmd_240x240[] = {                 		// Initialization commands for 7789 screens
+//    10,                       				// 9 commands in list:
+//    ST7789_SWRESET,   ST_CMD_DELAY,  		// 1: Software reset, no args, w/delay
+//      150,                     				// 150 ms delay
+//    ST7789_SLPOUT ,   ST_CMD_DELAY,  		// 2: Out of sleep mode, no args, w/delay
+//      255,                    				// 255 = 500 ms delay
+//    ST7789_COLMOD , 1+ST_CMD_DELAY,  		// 3: Set color mode, 1 arg + delay:
+//      0x55,                   				// 16-bit color
+//      10,                     				// 10 ms delay
+//    ST7789_MADCTL , 1,  					// 4: Memory access ctrl (directions), 1 arg:
+//      0x00,                   				// Row addr/col addr, bottom to top refresh
+//    ST7789_CASET  , 4,  					// 5: Column addr set, 4 args, no delay:
+//      0x00, ST7789_240x240_XSTART,          // XSTART = 0
+//	  (ST7789_TFTWIDTH+ST7789_240x240_XSTART) >> 8,
+//	  (ST7789_TFTWIDTH+ST7789_240x240_XSTART) & 0xFF,   // XEND = 240
+//    ST7789_RASET  , 4,  					// 6: Row addr set, 4 args, no delay:
+//      0x00, ST7789_240x240_YSTART,          // YSTART = 0
+//      (ST7789_TFTHEIGHT+ST7789_240x240_YSTART) >> 8,
+//	  (ST7789_TFTHEIGHT+ST7789_240x240_YSTART) & 0xFF,	// YEND = 240
+//    ST7789_INVON ,   ST_CMD_DELAY,  		// 7: Inversion ON
+//      10,
+//    ST7789_NORON  ,   ST_CMD_DELAY,  		// 8: Normal display on, no args, w/delay
+//      10,                     				// 10 ms delay
+//    ST7789_DISPON ,   ST_CMD_DELAY,  		// 9: Main screen turn on, no args, w/delay
+//    255 };                  				// 255 = 500 ms delay
   cmd_240x240[] = {                 		// Initialization commands for 7789 screens
-    10,                       				// 9 commands in list:
+    ??,                       				// 9 commands in list:
     ST7789_SWRESET,   ST_CMD_DELAY,  		// 1: Software reset, no args, w/delay
-      150,                     				// 150 ms delay
+      120,                     				// 150 ms delay
     ST7789_SLPOUT ,   ST_CMD_DELAY,  		// 2: Out of sleep mode, no args, w/delay
-      255,                    				// 255 = 500 ms delay
-    ST7789_COLMOD , 1+ST_CMD_DELAY,  		// 3: Set color mode, 1 arg + delay:
-      0x55,                   				// 16-bit color
-      10,                     				// 10 ms delay
-    ST7789_MADCTL , 1,  					// 4: Memory access ctrl (directions), 1 arg:
+      120,                    				// 255 = 500 ms delay
+    ST7789_MADCTL , 1,  					// 3: Memory access ctrl (directions), 1 arg:
       0x00,                   				// Row addr/col addr, bottom to top refresh
+    ST7789_COLMOD , 1+ST_CMD_DELAY,  		// 4: Set color mode, 1 arg + delay:
+      0x05,                   				// 65K COLOR
+      10,                     				// 10 ms delay
+	ST7789_PORCTRL, 5, 						// PORCH setting
+	  0x0C, 0x0C, 0x00, 0x33, 0x33,
+	ST7789_GCTRL  , 1,						// Gate Control
+	  0x22,
+	ST7789_VCOMS  , 1,						// VCOM Setting
+	  0x36,									// 1.45
+	ST7789_VDVVRHEN,1,						// VDV and VRH Command Enable
+	  0x01,									// enable
+	ST7789_VRHS   , 1,						// VRH Set
+	  0x19,									// 4.8+( vcom+vcom offset+vdv)
+	ST7789_VDVS   , 1,						// VDV Set
+	  0x20,									// 0v
+	ST7789_FRCTRL2, 1,						// Frame Rate Control in Normal Mode
+	  0x0F,									// 60Hz
+	ST7789_PWCTRL1, 2,						// Power Control 1
+	  0xA4, 0xA1,							// ????
+	ST7789_PVGAMCTRL, 14,					// Positive Voltage Gamma Control 
+	  0x70, 0x04, 0x08, 0x09, 0x09, 0x05,
+	  0x2A, 0x33, 0x41, 0x07, 0x13, 0x13,
+	  0x29, 0x2F,
+	ST7789_NVGAMCTRL, 14,					// Negative Voltage Gamma Control 
+	  0x70, 0x03, 0x09, 0x0A, 0x09, 0x06,
+	  0x2B, 0x34, 0x41, 0x07, 0x12, 0x14,
+	  0x28, 0x2E,
     ST7789_CASET  , 4,  					// 5: Column addr set, 4 args, no delay:
       0x00, ST7789_240x240_XSTART,          // XSTART = 0
 	  (ST7789_TFTWIDTH+ST7789_240x240_XSTART) >> 8,

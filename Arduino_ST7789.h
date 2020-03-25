@@ -78,6 +78,19 @@
 #define ST7789_RDID3   0xDC
 #define ST7789_RDID4   0xDD
 
+#define ST7789_PORCTRL 0xB2
+#define ST7789_GCTRL   0xB7
+#define ST7789_VCOMS   0xBB
+
+#define ST7789_VDVVRHEN 0xC2
+#define ST7789_VRHS		0xC3
+#define ST7789_VDVS		0xC4
+#define ST7789_FRCTRL2  0xC6
+
+#define ST7789_PWCTRL1   0xD0
+#define ST7789_PVGAMCTRL 0xE0
+#define ST7789_NVGAMCTRL 0xE1
+
 // Color definitions
 #define	BLACK   0x0000
 #define	BLUE    0x001F
