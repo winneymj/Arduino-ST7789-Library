@@ -40,7 +40,7 @@
 #define ST7789_TFTHEIGHT 	240
 
 #define ST7789_240x240_XSTART 0
-#define ST7789_240x240_YSTART 0
+#define ST7789_240x240_YSTART 40
 
 #define ST_CMD_DELAY   0x80    // special signifier for command lists
 

@@ -14,33 +14,34 @@
 #include <SPI.h>
 
 static const uint8_t PROGMEM
-//  cmd_240x240[] = {                 		// Initialization commands for 7789 screens
-//    10,                       				// 9 commands in list:
-//    ST7789_SWRESET,   ST_CMD_DELAY,  		// 1: Software reset, no args, w/delay
-//      150,                     				// 150 ms delay
-//    ST7789_SLPOUT ,   ST_CMD_DELAY,  		// 2: Out of sleep mode, no args, w/delay
-//      255,                    				// 255 = 500 ms delay
-//    ST7789_COLMOD , 1+ST_CMD_DELAY,  		// 3: Set color mode, 1 arg + delay:
-//      0x55,                   				// 16-bit color
-//      10,                     				// 10 ms delay
-//    ST7789_MADCTL , 1,  					// 4: Memory access ctrl (directions), 1 arg:
-//      0x00,                   				// Row addr/col addr, bottom to top refresh
-//    ST7789_CASET  , 4,  					// 5: Column addr set, 4 args, no delay:
-//      0x00, ST7789_240x240_XSTART,          // XSTART = 0
-//	  (ST7789_TFTWIDTH+ST7789_240x240_XSTART) >> 8,
-//	  (ST7789_TFTWIDTH+ST7789_240x240_XSTART) & 0xFF,   // XEND = 240
-//    ST7789_RASET  , 4,  					// 6: Row addr set, 4 args, no delay:
-//      0x00, ST7789_240x240_YSTART,          // YSTART = 0
-//      (ST7789_TFTHEIGHT+ST7789_240x240_YSTART) >> 8,
-//	  (ST7789_TFTHEIGHT+ST7789_240x240_YSTART) & 0xFF,	// YEND = 240
-//    ST7789_INVON ,   ST_CMD_DELAY,  		// 7: Inversion ON
-//      10,
-//    ST7789_NORON  ,   ST_CMD_DELAY,  		// 8: Normal display on, no args, w/delay
-//      10,                     				// 10 ms delay
-//    ST7789_DISPON ,   ST_CMD_DELAY,  		// 9: Main screen turn on, no args, w/delay
-//    255 };                  				// 255 = 500 ms delay
   cmd_240x240[] = {                 		// Initialization commands for 7789 screens
-    ??,                       				// 9 commands in list:
+    10,                       				// 9 commands in list:
+    ST7789_SWRESET,   ST_CMD_DELAY,  		// 1: Software reset, no args, w/delay
+      150,                     				// 150 ms delay
+    ST7789_SLPOUT ,   ST_CMD_DELAY,  		// 2: Out of sleep mode, no args, w/delay
+      255,                    				// 255 = 500 ms delay
+    ST7789_COLMOD , 1+ST_CMD_DELAY,  		// 3: Set color mode, 1 arg + delay:
+      0x55,                   				// 16-bit color
+      10,                     				// 10 ms delay
+    ST7789_MADCTL , 1,  					// 4: Memory access ctrl (directions), 1 arg:
+      0x00,                   				// Row addr/col addr, bottom to top refresh
+    ST7789_CASET  , 4,  					// 5: Column addr set, 4 args, no delay:
+      0x00, ST7789_240x240_XSTART,          // XSTART = 0
+	  (ST7789_TFTWIDTH+ST7789_240x240_XSTART) >> 8,
+	  (ST7789_TFTWIDTH+ST7789_240x240_XSTART) & 0xFF,   // XEND = 240
+    ST7789_RASET  , 4,  					// 6: Row addr set, 4 args, no delay:
+      0x00, ST7789_240x240_YSTART,          // YSTART = 0
+      (ST7789_TFTHEIGHT+ST7789_240x240_YSTART) >> 8,
+	  (ST7789_TFTHEIGHT+ST7789_240x240_YSTART) & 0xFF,	// YEND = 240
+    ST7789_INVON ,   ST_CMD_DELAY,  		// 7: Inversion ON
+      10,
+    ST7789_NORON  ,   ST_CMD_DELAY,  		// 8: Normal display on, no args, w/delay
+      10,                     				// 10 ms delay
+    ST7789_DISPON ,   ST_CMD_DELAY,  		// 9: Main screen turn on, no args, w/delay
+    255 };                  				// 255 = 500 ms delay
+/*
+  cmd_240x240[] = {                 		// Initialization commands for 7789 screens
+    19,                       				// 9 commands in list:
     ST7789_SWRESET,   ST_CMD_DELAY,  		// 1: Software reset, no args, w/delay
       120,                     				// 150 ms delay
     ST7789_SLPOUT ,   ST_CMD_DELAY,  		// 2: Out of sleep mode, no args, w/delay
@@ -74,21 +75,23 @@ static const uint8_t PROGMEM
 	  0x70, 0x03, 0x09, 0x0A, 0x09, 0x06,
 	  0x2B, 0x34, 0x41, 0x07, 0x12, 0x14,
 	  0x28, 0x2E,
-    ST7789_CASET  , 4,  					// 5: Column addr set, 4 args, no delay:
-      0x00, ST7789_240x240_XSTART,          // XSTART = 0
-	  (ST7789_TFTWIDTH+ST7789_240x240_XSTART) >> 8,
-	  (ST7789_TFTWIDTH+ST7789_240x240_XSTART) & 0xFF,   // XEND = 240
-    ST7789_RASET  , 4,  					// 6: Row addr set, 4 args, no delay:
-      0x00, ST7789_240x240_YSTART,          // YSTART = 0
-      (ST7789_TFTHEIGHT+ST7789_240x240_YSTART) >> 8,
-	  (ST7789_TFTHEIGHT+ST7789_240x240_YSTART) & 0xFF,	// YEND = 240
     ST7789_INVON ,   ST_CMD_DELAY,  		// 7: Inversion ON
       10,
-    ST7789_NORON  ,   ST_CMD_DELAY,  		// 8: Normal display on, no args, w/delay
-      10,                     				// 10 ms delay
     ST7789_DISPON ,   ST_CMD_DELAY,  		// 9: Main screen turn on, no args, w/delay
-    255 };                  				// 255 = 500 ms delay
-
+      255,
+    ST7789_CASET  , 4,  					// 5: Column addr set, 4 args, no delay:
+      0x00, 
+	  0x00,									// XSTART = 0
+	  0x00,
+	  0xEF,									// XEND = 239
+    ST7789_RASET  , 4,  					// 6: Row addr set, 4 args, no delay:
+      0x00, 
+	  0x00,									// YSTART = 0
+	  0x00,
+	  0xEF,									// YEND = 239
+    ST7789_NORON  ,   ST_CMD_DELAY,  		// 8: Normal display on, no args, w/delay
+      10};                  				// 255 = 500 ms delay
+*/
 inline uint16_t swapcolor(uint16_t x) { 
   return (x << 11) | (x & 0x07E0) | (x >> 11);
 }
@@ -463,12 +466,25 @@ void Arduino_ST7789::drawFastHLine(int16_t x, int16_t y, int16_t w,
 }
 
 void Arduino_ST7789::fillScreen(uint16_t color) {
-  fillRect(0, 0,  _width, _height, color);
+Serial.print("fillScreen, _width=");
+Serial.print(_width);
+Serial.print(", _height=");
+Serial.println(_height);
+	fillRect(0, 0,  _width, _height, color);
+//  fillRect(0, 0,  120, 120, color);
 }
 
 // fill a rectangle
 void Arduino_ST7789::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
   uint16_t color) {
+Serial.print("fillRect, x=");
+Serial.print(x);
+Serial.print("y=");
+Serial.print(y);
+Serial.print(", w=");
+Serial.print(w);
+Serial.print(", h=");
+Serial.println(h);
 
   // rudimentary clipping (drawChar w/big text requires this)
   if((x >= _width) || (y >= _height)) return;
