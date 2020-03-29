@@ -140,9 +140,6 @@ Arduino_ST7789::Arduino_ST7789(int8_t dc, int8_t rst, int8_t cs)
 
 inline void Arduino_ST7789::spiwrite(uint8_t c) 
 {
-
-  //Serial.println(c, HEX);
-
   if (_hwSPI) 
   {
 #if defined (SPI_HAS_TRANSACTION)
@@ -466,26 +463,12 @@ void Arduino_ST7789::drawFastHLine(int16_t x, int16_t y, int16_t w,
 }
 
 void Arduino_ST7789::fillScreen(uint16_t color) {
-Serial.print("fillScreen, _width=");
-Serial.print(_width);
-Serial.print(", _height=");
-Serial.println(_height);
 	fillRect(0, 0,  _width, _height, color);
-//  fillRect(0, 0,  120, 120, color);
 }
 
 // fill a rectangle
 void Arduino_ST7789::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
   uint16_t color) {
-Serial.print("fillRect, x=");
-Serial.print(x);
-Serial.print("y=");
-Serial.print(y);
-Serial.print(", w=");
-Serial.print(w);
-Serial.print(", h=");
-Serial.println(h);
-
   // rudimentary clipping (drawChar w/big text requires this)
   if((x >= _width) || (y >= _height)) return;
   if((x + w - 1) >= _width)  w = _width  - x;
